@@ -6,7 +6,7 @@
     <div class="stats shadow">
       <div class="stat stat-compact">
         <div class="stat-title">Erreurs</div>
-        <div class="stat-value text-2xl" id="errors">0/5</div>
+        <div class="stat-value text-2xl" id="errors">{{ erreurs() }}/5</div>
       </div>
       <div class="stat stat-compact">
         <div class="stat-title">Record</div>
@@ -28,36 +28,30 @@
             <line x1="150" y1="20" x2="150" y2="60" stroke-width="4" />
           </g>
 
-          <g id="error-1" class="hidden">
+          @if (erreurs() >= 1) {
             <circle cx="150" cy="90" r="30" fill="none" stroke-width="4" />
-          </g>
-
-          <g id="error-2" class="hidden">
+          }
+          @if (erreurs() >= 2) {
             <line x1="150" y1="120" x2="150" y2="220" stroke-width="4" />
-          </g>
-
-          <g id="error-3" class="hidden">
+          }
+          @if (erreurs() >= 3) {
             <line x1="150" y1="140" x2="110" y2="180" stroke-width="4" />
-          </g>
-
-          <g id="error-4" class="hidden">
+          }
+          @if (erreurs() >= 4) {
             <line x1="150" y1="140" x2="190" y2="180" stroke-width="4" />
-          </g>
-
-          <g id="error-5" class="hidden">
+          }
+          @if (erreurs() >= 5) {
             <line x1="150" y1="220" x2="110" y2="280" stroke-width="4" />
             <line x1="150" y1="220" x2="190" y2="280" stroke-width="4" />
-          </g>
+          }
         </svg>
       </div>
 
       <div class="word-container">
-        <div id="word-display" class="word-display">
-          <span class="letter-placeholder"></span>
-          <span class="letter-placeholder"></span>
-          <span class="letter-placeholder"></span>
-          <span class="letter-placeholder"></span>
-          <span class="letter-placeholder"></span>
+        <div class="word-display">
+          @for (lettre of motVisible(); track $index) {
+            <span class="letter-placeholder">{{ lettre !== '_' ? lettre : '' }}</span>
+          }
         </div>
       </div>
     </div>
@@ -67,8 +61,20 @@
         <div class="card-body">
           <h2 class="card-title">Lettres jouées</h2>
           <div class="text-center">
-            <p class="hint-text">Tapez une lettre au clavier</p>
-            <div id="letters-used" class="letters-container"></div>
+            @if (lettresJouees().length === 0) {
+              <p class="hint-text">Tapez une lettre au clavier</p>
+            }
+            <div class="letters-container">
+              @for (lettre of lettresJouees(); track lettre) {
+                <span
+                  class="badge badge-lg"
+                  [class.badge-success]="mot().includes(lettre)"
+                  [class.badge-error]="!mot().includes(lettre)"
+                >
+                  {{ lettre }}
+                </span>
+              }
+            </div>
           </div>
         </div>
       </div>
@@ -76,20 +82,35 @@
       <div class="card bg-base-200 shadow-xl">
         <div class="card-body">
           <h2 class="card-title">Actions</h2>
-          <button class="btn btn-primary btn-block">Nouvelle Partie</button>
-          <button class="btn btn-outline btn-block">Historique des parties</button>
+          <button class="btn btn-primary btn-block" (click)="nouvellePartie()">
+            Nouvelle Partie
+          </button>
+          <a class="btn btn-outline btn-block" routerLink="/history"> Historique des parties </a>
         </div>
       </div>
     </div>
   </div>
 </main>
 
-<dialog id="game-over-modal" class="modal">
-  <div class="modal-box">
-    <h3 class="font-bold text-lg">Partie terminée !</h3>
-    <p class="py-4" id="game-result"></p>
-    <div class="modal-action">
-      <button class="btn btn-primary">Rejouer</button>
+@if (etat() === 'gagne' || etat() === 'perdu') {
+  <dialog class="modal modal-open">
+    <div class="modal-box">
+      @if (etat() === 'gagne') {
+        <h3 class="font-bold text-lg text-success">🎉 Bravo, tu as gagné !</h3>
+        <p class="py-4">
+          Tu as trouvé <strong>{{ mot() }}</strong> avec <strong>{{ erreurs() }}</strong> erreur(s).
+        </p>
+      } @else {
+        <h3 class="font-bold text-lg text-error">💀 Partie terminée !</h3>
+        <p class="py-4">
+          Le mot était <strong>{{ mot() }}</strong
+          >.
+        </p>
+      }
+      <div class="modal-action">
+        <button class="btn btn-primary" (click)="nouvellePartie()">Rejouer</button>
+      </div>
     </div>
-  </div>
-</dialog>
+    <div class="modal-backdrop" (click)="nouvellePartie()"></div>
+  </dialog>
+}
