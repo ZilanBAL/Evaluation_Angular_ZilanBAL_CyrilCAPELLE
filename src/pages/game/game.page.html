@@ -1,0 +1,95 @@
+<header class="navbar bg-base-200">
+  <div class="flex-1">
+    <h1 class="text-2xl font-bold">🎮 Jeu du Pendu</h1>
+  </div>
+  <div class="flex-none gap-2">
+    <div class="stats shadow">
+      <div class="stat stat-compact">
+        <div class="stat-title">Erreurs</div>
+        <div class="stat-value text-2xl" id="errors">0/5</div>
+      </div>
+      <div class="stat stat-compact">
+        <div class="stat-title">Record</div>
+        <div class="stat-value text-2xl" id="record">-</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="main-grid">
+  <div class="game-layout">
+    <div class="game-area">
+      <div class="hangman-container">
+        <svg id="hangman" width="300" height="350" viewBox="0 0 300 350" class="stroke-primary">
+          <g id="base" class="opacity-30">
+            <line x1="20" y1="330" x2="180" y2="330" stroke-width="4" />
+            <line x1="50" y1="330" x2="50" y2="20" stroke-width="4" />
+            <line x1="50" y1="20" x2="150" y2="20" stroke-width="4" />
+            <line x1="150" y1="20" x2="150" y2="60" stroke-width="4" />
+          </g>
+
+          <g id="error-1" class="hidden">
+            <circle cx="150" cy="90" r="30" fill="none" stroke-width="4" />
+          </g>
+
+          <g id="error-2" class="hidden">
+            <line x1="150" y1="120" x2="150" y2="220" stroke-width="4" />
+          </g>
+
+          <g id="error-3" class="hidden">
+            <line x1="150" y1="140" x2="110" y2="180" stroke-width="4" />
+          </g>
+
+          <g id="error-4" class="hidden">
+            <line x1="150" y1="140" x2="190" y2="180" stroke-width="4" />
+          </g>
+
+          <g id="error-5" class="hidden">
+            <line x1="150" y1="220" x2="110" y2="280" stroke-width="4" />
+            <line x1="150" y1="220" x2="190" y2="280" stroke-width="4" />
+          </g>
+        </svg>
+      </div>
+
+      <div class="word-container">
+        <div id="word-display" class="word-display">
+          <span class="letter-placeholder"></span>
+          <span class="letter-placeholder"></span>
+          <span class="letter-placeholder"></span>
+          <span class="letter-placeholder"></span>
+          <span class="letter-placeholder"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="sidebar">
+      <div class="card bg-base-200 shadow-xl">
+        <div class="card-body">
+          <h2 class="card-title">Lettres jouées</h2>
+          <div class="text-center">
+            <p class="hint-text">Tapez une lettre au clavier</p>
+            <div id="letters-used" class="letters-container"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card bg-base-200 shadow-xl">
+        <div class="card-body">
+          <h2 class="card-title">Actions</h2>
+          <button class="btn btn-primary btn-block">Nouvelle Partie</button>
+          <button class="btn btn-outline btn-block">Historique des parties</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<dialog id="game-over-modal" class="modal">
+  <div class="modal-box">
+    <h3 class="font-bold text-lg">Partie terminée !</h3>
+    <p class="py-4" id="game-result"></p>
+    <div class="modal-action">
+      <button class="btn btn-primary">Rejouer</button>
+    </div>
+  </div>
+</dialog>
