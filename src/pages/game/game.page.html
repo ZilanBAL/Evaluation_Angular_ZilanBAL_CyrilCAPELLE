@@ -17,79 +17,86 @@
 </header>
 
 <main class="main-grid">
-  <div class="game-layout">
-    <div class="game-area">
-      <div class="hangman-container">
-        <svg id="hangman" width="300" height="350" viewBox="0 0 300 350" class="stroke-primary">
-          <g id="base" class="opacity-30">
-            <line x1="20" y1="330" x2="180" y2="330" stroke-width="4" />
-            <line x1="50" y1="330" x2="50" y2="20" stroke-width="4" />
-            <line x1="50" y1="20" x2="150" y2="20" stroke-width="4" />
-            <line x1="150" y1="20" x2="150" y2="60" stroke-width="4" />
-          </g>
-
-          @if (gameCatalog.erreurs() >= 1) {
-            <circle cx="150" cy="90" r="30" fill="none" stroke-width="4" />
-          }
-          @if (gameCatalog.erreurs() >= 2) {
-            <line x1="150" y1="120" x2="150" y2="220" stroke-width="4" />
-          }
-          @if (gameCatalog.erreurs() >= 3) {
-            <line x1="150" y1="140" x2="110" y2="180" stroke-width="4" />
-          }
-          @if (gameCatalog.erreurs() >= 4) {
-            <line x1="150" y1="140" x2="190" y2="180" stroke-width="4" />
-          }
-          @if (gameCatalog.erreurs() >= 5) {
-            <line x1="150" y1="220" x2="110" y2="280" stroke-width="4" />
-            <line x1="150" y1="220" x2="190" y2="280" stroke-width="4" />
-          }
-        </svg>
-      </div>
-
-      <div class="word-container">
-        <div class="word-display">
-          @for (lettre of gameCatalog.motVisible(); track $index) {
-            <span class="letter-placeholder">{{ lettre !== '_' ? lettre : '' }}</span>
-          }
-        </div>
-      </div>
+  @if (gameCatalog.isChargement('LOADING')) {
+    <div class="flex justify-center items-center min-h-64">
+      <span class="loading loading-spinner loading-lg text-primary"></span>
+      <p class="ml-4">Chargement du mot...</p>
     </div>
+  } @else {
+    <div class="game-layout">
+      <div class="game-area">
+        <div class="hangman-container">
+          <svg id="hangman" width="300" height="350" viewBox="0 0 300 350" class="stroke-primary">
+            <g id="base" class="opacity-30">
+              <line x1="20" y1="330" x2="180" y2="330" stroke-width="4" />
+              <line x1="50" y1="330" x2="50" y2="20" stroke-width="4" />
+              <line x1="50" y1="20" x2="150" y2="20" stroke-width="4" />
+              <line x1="150" y1="20" x2="150" y2="60" stroke-width="4" />
+            </g>
 
-    <div class="sidebar">
-      <div class="card bg-base-200 shadow-xl">
-        <div class="card-body">
-          <h2 class="card-title">Lettres jouées</h2>
-          <div class="text-center">
-            @if (gameCatalog.lettresJouees().length === 0) {
-              <p class="hint-text">Tapez une lettre au clavier</p>
+            @if (gameCatalog.erreurs() >= 1) {
+              <circle cx="150" cy="90" r="30" fill="none" stroke-width="4" />
             }
-            <div class="letters-container">
-              @for (lettre of gameCatalog.lettresJouees(); track lettre) {
-                <span
-                  class="badge badge-lg"
-                  [class.badge-success]="gameCatalog.mot().includes(lettre)"
-                  [class.badge-error]="!gameCatalog.mot().includes(lettre)"
-                >
-                  {{ lettre }}
-                </span>
-              }
-            </div>
+            @if (gameCatalog.erreurs() >= 2) {
+              <line x1="150" y1="120" x2="150" y2="220" stroke-width="4" />
+            }
+            @if (gameCatalog.erreurs() >= 3) {
+              <line x1="150" y1="140" x2="110" y2="180" stroke-width="4" />
+            }
+            @if (gameCatalog.erreurs() >= 4) {
+              <line x1="150" y1="140" x2="190" y2="180" stroke-width="4" />
+            }
+            @if (gameCatalog.erreurs() >= 5) {
+              <line x1="150" y1="220" x2="110" y2="280" stroke-width="4" />
+              <line x1="150" y1="220" x2="190" y2="280" stroke-width="4" />
+            }
+          </svg>
+        </div>
+
+        <div class="word-container">
+          <div class="word-display">
+            @for (lettre of gameCatalog.motVisible(); track $index) {
+              <span class="letter-placeholder">{{ lettre !== '_' ? lettre : '' }}</span>
+            }
           </div>
         </div>
       </div>
 
-      <div class="card bg-base-200 shadow-xl">
-        <div class="card-body">
-          <h2 class="card-title">Actions</h2>
-          <button class="btn btn-primary btn-block" (click)="gameCatalog.nouvellePartie()">
-            Nouvelle Partie
-          </button>
-          <a class="btn btn-outline btn-block" routerLink="/history"> Historique des parties </a>
+      <div class="sidebar">
+        <div class="card bg-base-200 shadow-xl">
+          <div class="card-body">
+            <h2 class="card-title">Lettres jouées</h2>
+            <div class="text-center">
+              @if (gameCatalog.lettresJouees().length === 0) {
+                <p class="hint-text">Tapez une lettre au clavier</p>
+              }
+              <div class="letters-container">
+                @for (lettre of gameCatalog.lettresJouees(); track lettre) {
+                  <span
+                    class="badge badge-lg"
+                    [class.badge-success]="gameCatalog.mot().includes(lettre)"
+                    [class.badge-error]="!gameCatalog.mot().includes(lettre)"
+                  >
+                    {{ lettre }}
+                  </span>
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card bg-base-200 shadow-xl">
+          <div class="card-body">
+            <h2 class="card-title">Actions</h2>
+            <button class="btn btn-primary btn-block" (click)="gameCatalog.nouvellePartie()">
+              Nouvelle Partie
+            </button>
+            <a class="btn btn-outline btn-block" routerLink="/history"> Historique des parties </a>
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  }
 </main>
 
 @if (gameCatalog.etat() === 'gagne' || gameCatalog.etat() === 'perdu') {

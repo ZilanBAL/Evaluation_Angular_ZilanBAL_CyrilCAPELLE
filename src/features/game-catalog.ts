@@ -1,8 +1,9 @@
-import { computed, Injectable, signal } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { computed, inject, Injectable, signal } from '@angular/core';
+import { catchError, map, of } from 'rxjs';
 
 type EtatPartie = 'en-cours' | 'gagne' | 'perdu';
-
-// type EtatChargement = 'IDLE' | 'LOADING' | 'ERROR' | 'LOADED';
+type EtatChargement = 'IDLE' | 'LOADING' | 'ERROR' | 'LOADED';
 
 const LISTE_MOTS = ['MARVEL', 'IRONMAN', 'SPIDERMAN', 'HULK', 'LOKI', 'TITI'];
 
@@ -17,6 +18,8 @@ export type HistoriquePartie = {
   providedIn: 'root',
 })
 export class GameCatalog {
+  private readonly http = inject(HttpClient);
+
   private readonly _mot = signal<string>('');
   readonly mot = this._mot.asReadonly();
 
@@ -31,6 +34,12 @@ export class GameCatalog {
 
   private readonly _historique = signal<HistoriquePartie[]>([]);
   readonly historique = this._historique.asReadonly();
+
+  private readonly _chargement = signal<EtatChargement>('IDLE');
+
+  isChargement(etat: EtatChargement): boolean {
+    return this._chargement() === etat;
+  }
 
   readonly motVisible = computed(() =>
     this._mot()
@@ -56,11 +65,22 @@ export class GameCatalog {
   }
 
   nouvellePartie(): void {
-    const mot = LISTE_MOTS[Math.floor(Math.random() * LISTE_MOTS.length)];
-    this._mot.set(mot);
-    this._lettresJouees.set([]);
-    this._erreurs.set(0);
-    this._etat.set('en-cours');
+    this._chargement.set('LOADING');
+    this.http
+      .get<{ word: string }[]>(
+        'https://random-words-api.kushcreates.com/api?language=fr&type=uppercase&words=1',
+      )
+      .pipe(
+        map((res) => res[0].word),
+        catchError(() => of(LISTE_MOTS[Math.floor(Math.random() * LISTE_MOTS.length)])),
+      )
+      .subscribe((mot) => {
+        this._mot.set(mot);
+        this._lettresJouees.set([]);
+        this._erreurs.set(0);
+        this._etat.set('en-cours');
+        this._chargement.set('LOADED');
+      });
   }
 
   jouerLettre(lettre: string): void {

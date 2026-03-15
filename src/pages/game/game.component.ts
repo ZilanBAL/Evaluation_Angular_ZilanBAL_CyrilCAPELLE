@@ -2,12 +2,6 @@ import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { GameCatalog } from '../../features/game-catalog';
 
-type EtatPartie = 'en-cours' | 'gagne' | 'perdu';
-
-// type EtatChargement = 'IDLE' | 'LOADING' | 'ERROR' | 'LOADED';
-
-const LISTE_MOTS = ['MARVEL', 'IRONMAN', 'SPIDERMAN', 'HULK', 'LOKI', 'TITI'];
-
 @Component({
   selector: 'app-game',
   imports: [RouterLink],
