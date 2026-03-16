@@ -1,0 +1,14 @@
+@if (lettres().length === 0) {
+  <p class="hint-text">Tapez une lettre au clavier</p>
+}
+<div class="letters-container">
+  @for (lettre of lettres(); track lettre) {
+    <span
+      class="badge badge-lg"
+      [class.badge-success]="mot().includes(lettre)"
+      [class.badge-error]="!mot().includes(lettre)"
+    >
+      {{ lettre }}
+    </span>
+  }
+</div>

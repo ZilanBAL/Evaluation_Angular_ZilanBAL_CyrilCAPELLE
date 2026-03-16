@@ -1,10 +1,13 @@
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { GameCatalog } from '../../features/game-catalog';
+import { PenduDessin } from '../../features/game/pendu-dessin/pendu-dessin';
+import { MotAffichage } from '../../features/game/mot-affichage/mot-affichage';
+import { LettresJouees } from '../../features/game/lettres-jouees/lettres-jouees';
 
 @Component({
   selector: 'app-game',
-  imports: [RouterLink],
+  imports: [RouterLink, PenduDessin, MotAffichage, LettresJouees],
   templateUrl: './game.page.html',
   styleUrl: './game.css',
 })

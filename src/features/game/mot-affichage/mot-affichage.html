@@ -1,0 +1,7 @@
+<div class="word-container">
+  <div class="word-display">
+    @for (lettre of motVisible(); track $index) {
+      <span class="letter-placeholder">{{ lettre !== '_' ? lettre : '' }}</span>
+    }
+  </div>
+</div>
