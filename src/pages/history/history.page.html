@@ -1,1 +1,34 @@
-<p>history works!</p>
+<header class="navbar bg-base-200">
+  <a class="btn btn-ghost" routerLink="/">← Retour au jeu</a>
+</header>
+
+<main class="main-grid">
+  @if (gameCatalog.historique().length === 0) {
+    <p>Aucune partie jouée pour l'instant.</p>
+  } @else {
+    <table class="table table-zebra">
+      <thead>
+        <tr>
+          <th>Résultat</th>
+          <th>Mot</th>
+          <th>Erreurs</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (entree of gameCatalog.historique(); track entree.id) {
+          <tr>
+            <td>
+              @if (entree.etat === 'gagne') {
+                <span class="badge badge-success">Victoire 🎉</span>
+              } @else {
+                <span class="badge badge-error">Défaite 💀</span>
+              }
+            </td>
+            <td>{{ entree.mot }}</td>
+            <td>{{ entree.erreurs }}/5</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+</main>
