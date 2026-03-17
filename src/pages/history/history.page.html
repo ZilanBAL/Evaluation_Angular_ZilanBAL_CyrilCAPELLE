@@ -9,14 +9,17 @@
     <table class="table table-zebra">
       <thead>
         <tr>
+          <th>Date de la partie</th>
           <th>Résultat</th>
           <th>Mot</th>
           <th>Erreurs</th>
+          <th>Lettres trouver</th>
         </tr>
       </thead>
       <tbody>
         @for (entree of gameCatalog.historique(); track entree.id) {
           <tr>
+            <td>{{ entree.date | date: 'dd/MM/yyyy HH:mm' }}</td>
             <td>
               @if (entree.etat === 'gagne') {
                 <span class="badge badge-success">Victoire 🎉</span>
@@ -26,6 +29,7 @@
             </td>
             <td>{{ entree.mot }}</td>
             <td>{{ entree.erreurs }}/5</td>
+            <td>{{ entree.lettresJouees.join(', ') }}</td>
           </tr>
         }
       </tbody>
