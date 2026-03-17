@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { GameCatalog } from '../../features/game-catalog';
+import { GameCatalog } from '../../features/services/game-catalog';
 import { PenduDessin } from '../../features/game/pendu-dessin/pendu-dessin';
 import { MotAffichage } from '../../features/game/mot-affichage/mot-affichage';
 import { LettresJouees } from '../../features/game/lettres-jouees/lettres-jouees';
