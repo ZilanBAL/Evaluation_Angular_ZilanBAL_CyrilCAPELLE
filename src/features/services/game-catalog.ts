@@ -86,7 +86,10 @@ export class GameCatalog {
             return LISTE_MOTS[Math.floor(Math.random() * LISTE_MOTS.length)];
           return mot;
         }),
-        catchError(() => of(LISTE_MOTS[Math.floor(Math.random() * LISTE_MOTS.length)])),
+        catchError(() => {
+          this._chargement.set('ERROR');
+          return of(LISTE_MOTS[Math.floor(Math.random() * LISTE_MOTS.length)]);
+        }),
       )
       .subscribe((mot) => {
         this._mot.set(mot);
