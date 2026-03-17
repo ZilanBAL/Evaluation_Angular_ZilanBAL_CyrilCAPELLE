@@ -93,6 +93,8 @@ export class GameCatalog {
       )
       .subscribe((mot) => {
         this._mot.set(mot);
+        console.log(mot);
+
         this._lettresJouees.set([]);
         this._erreurs.set(0);
         this._etat.set('en-cours');

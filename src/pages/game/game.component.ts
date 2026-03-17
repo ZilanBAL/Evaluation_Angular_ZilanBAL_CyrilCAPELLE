@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, HostListener, inject, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { GameCatalog } from '../../features/services/game-catalog';
 import { PenduDessin } from '../../features/game/pendu-dessin/pendu-dessin';
@@ -16,8 +16,9 @@ export class GamePage implements OnInit {
 
   ngOnInit(): void {
     this.gameCatalog.nouvellePartie();
-    document.addEventListener('keydown', (event) => {
-      this.gameCatalog.jouerLettre(event.key);
-    });
+  }
+  @HostListener('document:keydown', ['$event'])
+  onKeyDown(event: KeyboardEvent): void {
+    this.gameCatalog.jouerLettre(event.key);
   }
 }
