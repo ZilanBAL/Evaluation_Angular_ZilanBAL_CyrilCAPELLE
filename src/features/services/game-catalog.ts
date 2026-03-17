@@ -12,6 +12,8 @@ export type HistoriquePartie = {
   mot: string;
   etat: EtatPartie;
   erreurs: number;
+  date: Date;
+  lettresJouees: string[];
 };
 
 @Injectable({
@@ -59,7 +61,14 @@ export class GameCatalog {
   private prochainId = 1;
   private _sauvegarder(etat: EtatPartie): void {
     this._historique.update((historique) => [
-      { id: this.prochainId++, mot: this._mot(), etat, erreurs: this._erreurs() },
+      {
+        id: this.prochainId++,
+        mot: this._mot(),
+        etat,
+        erreurs: this._erreurs(),
+        date: new Date(),
+        lettresJouees: this._lettresJouees(),
+      },
       ...historique,
     ]);
   }
