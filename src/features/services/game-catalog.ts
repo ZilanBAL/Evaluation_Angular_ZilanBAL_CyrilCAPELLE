@@ -68,10 +68,15 @@ export class GameCatalog {
     this._chargement.set('LOADING');
     this.http
       .get<{ word: string }[]>(
-        'https://random-words-api.kushcreates.com/api?language=fr&type=uppercase&words=1',
+        'https://random-words-api.kushcreates.com/api?language=fr&length=10&type=uppercase&words=1',
       )
       .pipe(
-        map((res) => res[0].word),
+        map((res) => {
+          const mot = res[0].word;
+          if (mot.includes(' ') || mot.includes('-'))
+            return LISTE_MOTS[Math.floor(Math.random() * LISTE_MOTS.length)];
+          return mot;
+        }),
         catchError(() => of(LISTE_MOTS[Math.floor(Math.random() * LISTE_MOTS.length)])),
       )
       .subscribe((mot) => {
